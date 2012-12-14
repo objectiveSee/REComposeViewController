@@ -186,8 +186,8 @@
 
 - (IBAction)accountButtonTouched
 {
-    if ([self.delegate respondsToSelector:@selector(tweetTextViewAccountButtonWasTouched:)]) {
-        [self.delegate performSelector:@selector(tweetTextViewAccountButtonWasTouched:) withObject:self];
+    if ([self.delegate respondsToSelector:@selector(textViewAccountButtonWasTouched:)]) {
+        [self.delegate performSelector:@selector(textViewAccountButtonWasTouched:) withObject:self];
     }
 }
 
