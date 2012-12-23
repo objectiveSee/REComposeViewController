@@ -25,7 +25,6 @@
 
 #import <UIKit/UIKit.h>
 #import "REComposeSheetView.h"
-#import "REComposeBackgroundView.h"
 
 enum REComposeResult {
     REComposeResultCancelled,
@@ -39,7 +38,7 @@ typedef void (^REComposeViewControllerCompletionHandler)(REComposeResult result)
 
 @interface REComposeViewController : UIViewController <REComposeSheetViewDelegate> {
     REComposeSheetView *_sheetView;
-    REComposeBackgroundView *_backgroundView;
+    UIView *_backgroundView;
     UIView *_backView;
     UIView *_containerView;
     UIImageView *_paperclipView;
@@ -65,7 +64,7 @@ typedef void (^REComposeViewControllerCompletionHandler)(REComposeResult result)
 @end
 
 @protocol REComposeViewControllerDelegate <NSObject>
-
+@optional
 - (void)composeViewController:(REComposeViewController *)composeViewController didFinishWithResult:(REComposeResult)result;
 
 @end

@@ -52,9 +52,10 @@
 {
     [super viewDidLoad];
     
-    _backgroundView = [[REComposeBackgroundView alloc] initWithFrame:self.view.bounds];
+    _backgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
+    _backgroundView.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8];
+
     _backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    _backgroundView.centerOffset = CGSizeMake(0, - self.view.frame.size.height / 2);
     _backgroundView.alpha = 0;
     
     
@@ -189,7 +190,7 @@
                           delay:0.1
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         _backgroundView.alpha = 0;
+//                         _backgroundView.alpha = 0;
                      } completion:^(BOOL finished) {
                          [super dismissViewControllerAnimated:NO completion:nil];
                      }];
