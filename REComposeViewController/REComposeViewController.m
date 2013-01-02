@@ -112,7 +112,7 @@
 
 }
 
-- (void) viewWillDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear: animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
@@ -177,25 +177,6 @@
     _sheetView.textViewContainer.frame = textViewContainerFrame;
 }
 
-- (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion
-{
-    [_sheetView.textView resignFirstResponder];
-    [UIView animateWithDuration:0.4 animations:^{
-        CGRect frame = _containerView.frame;
-        frame.origin.y = self.view.frame.size.height;
-        _containerView.frame = frame;
-    }];
-    
-    [UIView animateWithDuration:0.4
-                          delay:0.1
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-//                         _backgroundView.alpha = 0;
-                     } completion:^(BOOL finished) {
-                         [super dismissViewControllerAnimated:NO completion:nil];
-                     }];
-}
-
 #pragma mark -
 #pragma mark Accessors
 
@@ -243,26 +224,35 @@
 #pragma mark -
 #pragma mark REComposeSheetViewDelegate
 
+- (void)_dismissWithResult:(REComposeResult)result
+{
+    [_sheetView.textView resignFirstResponder];
+    [UIView animateWithDuration:0.4 animations:^{
+        CGRect frame = _containerView.frame;
+        frame.origin.y = self.view.frame.size.height;
+        _containerView.frame = frame;
+        _backgroundView.alpha = 0;
+    } completion:^(BOOL finished) {
+        NSCAssert([NSThread isMainThread] == YES, @"Should be main thread");
+        NSLog(@"Finished = %@", finished ? @"YES":@"NO");
+        if (_delegate && [_delegate respondsToSelector:@selector(composeViewController:didFinishWithResult:)]) {
+            [_delegate composeViewController:self didFinishWithResult:result];
+        }
+        if (_completionHandler) {
+            _completionHandler(result);
+        }
+        
+    }];
+}
+
 - (void)cancelButtonPressed
 {
-    if (_delegate && [_delegate respondsToSelector:@selector(composeViewController:didFinishWithResult:)]) {
-        [_delegate composeViewController:self didFinishWithResult:REComposeResultCancelled];
-    }
-    if (_completionHandler) {
-        _completionHandler(REComposeResultCancelled);
-    }
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self _dismissWithResult:REComposeResultCancelled];
 }
 
 - (void)postButtonPressed
 {
-    if (_delegate && [_delegate respondsToSelector:@selector(composeViewController:didFinishWithResult:)]) {
-        [_delegate composeViewController:self didFinishWithResult:REComposeResultPosted];
-    }
-    if (_completionHandler) {
-        _completionHandler(REComposeResultPosted);
-    }
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self _dismissWithResult:REComposeResultPosted];
 }
 
 #pragma mark -
