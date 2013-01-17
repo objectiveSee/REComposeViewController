@@ -67,6 +67,7 @@
         _attachmentImageView = [[UIImageView alloc] initWithFrame:CGRectMake(6, 2, 72, 72)];
         _attachmentImageView.layer.cornerRadius = 3.0f;
         _attachmentImageView.layer.masksToBounds = YES;
+        _attachmentImageView.contentMode = UIViewContentModeScaleAspectFill;
         [_attachmentView addSubview:_attachmentImageView];
         
         _attachmentContainerView = [[UIImageView alloc] initWithFrame:_attachmentView.bounds];
